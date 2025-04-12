@@ -1,5 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
+
 
 const categories = ['Афиша', 'Медиа', 'Фильмы', 'Актеры', 'Новости', 'Подборки', 'Категории'];
 
@@ -9,7 +11,14 @@ const Header: React.FC = () => {
       
       <Link href={"/"}>
         <div className="flex gap-2 items-center cursor-pointer mb-4 md:mb-0">
-          <img src="/cinema 1.svg" alt="logo" className="w-[40px] h-[40px] md:w-[50px] md:h-[50px]" />
+        <Image
+  src="/cinema 1.svg"
+  alt="logo"
+  width={40}  
+  height={40} 
+  className="md:w-[50px] md:h-[50px]"  
+  loading="lazy"
+/>
           <div className="flex text-xl md:text-2xl">
             <h1 className="text-white">Kino</h1>
             <h1 className="text-[#3657cb]">area</h1>

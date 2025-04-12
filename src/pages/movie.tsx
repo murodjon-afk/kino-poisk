@@ -1,27 +1,22 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Header from "../components/header";
+import Image from 'next/image';
 
 interface Movie {
   id: number;
   title: string;
   poster_path: string;
   backdrop_path: string;
+  vote_average: string;
+  vote_count: string;
 }
 
-const MoviePosters: React.FC = () => {
-  const [movies, setMovies] = useState<Movie[]>([]);
+interface MoviePostersProps {
+  movies: Movie[];
+}
+
+const MoviePosters: React.FC<MoviePostersProps> = ({ movies }) => {
   const [searchTerm, setSearchTerm] = useState<string>(''); 
-
-  useEffect(() => {
-    const fetchMovies = async () => {
-      const response = await fetch('https://api.themoviedb.org/3/trending/movie/week?api_key=956055ece61ff6da16e896668e0403e2');
-      const data = await response.json();
-
-      setMovies(data.results);
-    };
-
-    fetchMovies();
-  }, []);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
@@ -56,36 +51,49 @@ const MoviePosters: React.FC = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 p-8">
-          {filteredMovies.map((movie) => (
-  <div key={movie.id} className="relative rounded-lg overflow-hidden ">
-    <div className="p-4">
-      {movie.poster_path && (
-        <div className="mt-2">
-          <img
-            src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-            alt={movie.title}
-            className="w-full h-auto rounded-md"
-          />
-        </div>
-      )}
-      
-      <h3 className="text-black text-lg font-bold pt-1 text-white">{movie.title}</h3>
-      
-      <div className="absolute top-7 left-4 text-white bg-blue-500 px-2 py-1 rounded-[5px] text-sm">
-        <span>{movie.vote_average}</span>
-      </div>
-      <div className="absolute top-7 left-24 text-white bg-green-500 px-2 py-1 rounded-[5px] text-sm">
-        <span>{movie.vote_count} votes</span>
-      </div>
-    </div>
-  </div>
-))}
+            {filteredMovies.map((movie) => (
+              <div key={movie.id} className="relative rounded-lg overflow-hidden">
+                <div className="p-4">
+                  {movie.poster_path && (
+                    <div className="mt-2">
+                      <Image
+                        src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                        alt={movie.title}
+                        width={500}  
+                        height={750} 
+                        className="rounded-md"
+                        loading="lazy"
+                      />
+                    </div>
+                  )}
 
+                  <h3 className="text-black text-lg font-bold pt-1 text-white">{movie.title}</h3>
+
+                  <div className="absolute top-7 left-4 text-white bg-blue-500 px-2 py-1 rounded-[5px] text-sm">
+                    <span>{movie.vote_average}</span>
+                  </div>
+                  <div className="absolute top-7 left-24 text-white bg-green-500 px-2 py-1 rounded-[5px] text-sm">
+                    <span>{movie.vote_count} votes</span>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>
     </>
   );
 };
+
+export async function getServerSideProps() {
+  const response = await fetch('https://api.themoviedb.org/3/trending/movie/week?api_key=956055ece61ff6da16e896668e0403e2');
+  const data = await response.json();
+
+  return {
+    props: {
+      movies: data.results,
+    },
+  };
+}
 
 export default MoviePosters;

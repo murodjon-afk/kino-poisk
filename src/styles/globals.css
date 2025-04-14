@@ -146,3 +146,43 @@ body {
 
 
 
+@media (max-width: 537px) {
+  #genre-filter {
+    display: none;
+  }
+  #category {
+    display: none;
+  }
+
+  #filter-parent{
+    display:flex;
+    flex-direction: row;
+  }
+  #header{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+  }
+}
+
+@media (min-width: 537px) {
+  #burger {
+    display: none;
+  }
+
+  
+}
+
+@media (max-width: 537px) {
+
+  
+}
+
+
+
+
+
+#poster-movie ,#acrtors-movie{
+  scrollbar-width: none;
+}
